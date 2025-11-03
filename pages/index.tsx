@@ -9,7 +9,7 @@ const PIXEL_SCALE = 4; // Each logical pixel will be 4x4 on screen for visibilit
 // Replace with your actual Supabase details
 // You must set these as Environment Variables in Vercel and include a fallback for the browser client
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'postgresql://postgres:rplacedbpassword@db.chblximrthogrfginpob.supabase.co:5432/postgres';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'https://chblximrthogrfginpob.supabase.co';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
