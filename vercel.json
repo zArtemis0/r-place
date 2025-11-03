@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "pages/api/place.ts": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
