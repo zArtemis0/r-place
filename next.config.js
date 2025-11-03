@@ -1,16 +1,26 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // This is the CRITICAL fix for the 'pg' module's Node.js dependencies (fs, net, etc.)
   webpack: (config, { isServer }) => {
-    // Check if we are building for the server environment (the API route)
+    // This part ensures that 'pg' itself is not bundled for the client
     if (isServer) {
-      // Add 'pg' to the list of packages that should be treated as external Node modules
-      // This stops Webpack from trying to bundle them for the browser.
       config.externals.push('pg');
     }
 
-    // Always return the modified configuration
+    // CRITICAL FIX: Explicitly disable Node.js core module polyfills for the browser
+    if (!isServer) {
+      config.resolve.fallback = {
+        // Disables polyfills for the specific modules causing the "Can't resolve..." errors
+        fs: false, 
+        net: false,
+        dns: false,
+        tls: false,
+        
+        // Use existing fallbacks if they exist
+        ...config.resolve.fallback,
+      };
+    }
+
     return config;
   },
 };
