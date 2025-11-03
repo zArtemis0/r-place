@@ -14,7 +14,7 @@ const PIXEL_SCALE = 4; // Each logical pixel will be 4x4 on screen for visibilit
 // NOTE: You must replace 'YOUR_ANON_KEY_HERE' with your actual, long public ANON key.
 // (I cannot generate your private key, so this one specific value MUST be replaced.)
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://chblximrthogrfginpob.supabase.co'; 
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'postgresql://postgres:rplacedbpassword@db.chblximrthogrfginpob.supabase.co:5432/postgres'; 
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoYmx4aW1ydGhvZ3JmZ2lucG9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxODEyNjgsImV4cCI6MjA3Nzc1NzI2OH0.2tSXZUwu2QaQypNQtpgDoSXAO3jSKht_nBZeoBzAB9M'; 
 
 // This client connects to the Supabase Realtime service for instant updates.
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
