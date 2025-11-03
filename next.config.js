@@ -1,17 +1,16 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // This tells Next.js to treat the 'pg' library as an external dependency
-  // that should only be available on the Vercel server, not the browser.
+  // This is the CRITICAL fix for the 'pg' module's Node.js dependencies (fs, net, etc.)
   webpack: (config, { isServer }) => {
-    // Only apply this change to the server-side build phase
+    // Check if we are building for the server environment (the API route)
     if (isServer) {
-      config.externals = {
-        ...config.externals,
-        // Add the 'pg' module to the list of externals
-        'pg': 'commonjs pg', 
-      };
+      // Add 'pg' to the list of packages that should be treated as external Node modules
+      // This stops Webpack from trying to bundle them for the browser.
+      config.externals.push('pg');
     }
+
+    // Always return the modified configuration
     return config;
   },
 };
