@@ -6,11 +6,17 @@ import { createClient } from '@supabase/supabase-js';
 const CANVAS_SIZE = 1000;
 const PIXEL_SCALE = 4; // Each logical pixel will be 4x4 on screen for visibility
 
-// Replace with your actual Supabase details
-// You must set these as Environment Variables in Vercel and include a fallback for the browser client
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'postgresql://postgres:rplacedbpassword@db.chblximrthogrfginpob.supabase.co:5432/postgres';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'https://chblximrthogrfginpob.supabase.co';
+// **CORRECTION:** The Supabase Client uses the PUBLIC Project URL and the ANON Key.
+// 1. SUPABASE_URL must be the HTTPS link (the project URL).
+// 2. SUPABASE_ANON_KEY must be the actual long public key.
+// The code relies on the Vercel Environment Variables, with temporary fallbacks here:
 
+// NOTE: You must replace 'YOUR_ANON_KEY_HERE' with your actual, long public ANON key.
+// (I cannot generate your private key, so this one specific value MUST be replaced.)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://chblximrthogrfginpob.supabase.co'; 
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'postgresql://postgres:rplacedbpassword@db.chblximrthogrfginpob.supabase.co:5432/postgres'; 
+
+// This client connects to the Supabase Realtime service for instant updates.
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 interface Pixel {
@@ -48,9 +54,7 @@ const CanvasPage: React.FC = () => {
     
     // 1. Initial Data Fetch (Full Canvas)
     const fetchInitialCanvas = async () => {
-      // NOTE: For 1 million rows, fetching the whole table at once is very slow. 
-      // A better approach is to fetch a pre-rendered image or use a tileset, 
-      // but for scratch, we use the simple fetch:
+      // Fetching up to 1 million rows from the public URL
       const { data, error } = await supabase
         .from('pixels')
         .select('x, y, color')
@@ -108,6 +112,7 @@ const CanvasPage: React.FC = () => {
     setCooldownMessage(null); // Clear previous messages
 
     try {
+        // API call to the serverless function (which has the secret DB access)
         const response = await fetch('/api/place', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -115,8 +120,7 @@ const CanvasPage: React.FC = () => {
         });
 
         if (response.status === 200) {
-            // Success: Local canvas update will happen via the Real-Time listener
-            // (or you can update it immediately here for better UX)
+            // Success: Draw the pixel immediately for a better user experience
             drawPixel(pixelX, pixelY, selectedColor);
             setCooldownMessage('Pixel placed successfully!');
         } else if (response.status === 429) {
